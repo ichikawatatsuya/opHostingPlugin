@@ -19,6 +19,19 @@ class communityActions extends opCommunityAction
 {
   const VIEW_SNS_MANAGER = 'SnsManager';
 
+  /**
+   *
+   * @var opHostingSnsManager
+   */
+  private $_snsManager;
+
+  public function preExecute()
+  {
+    parent::preExecute();
+    $this->_snsManager = new opHostingSnsManager();
+
+  }
+
  /**
   * Executes home action
   *
@@ -58,6 +71,36 @@ class communityActions extends opCommunityAction
   {
 
     $this->form = new opHostingSNSManagerForm();
+
+    if ($request->isMethod(sfRequest::POST))
+    {
+      $this->form->bind($request->getPostParameter('manager'));
+      if ($this->form->isValid())
+      {
+        $this->getUser()->setFlash('input_data', $request->getPostParameter('manager'));
+        $this->redirect('community/sns_manage');
+      }
+      else
+      {
+        
+      }
+    }
+
+  }
+
+  public function executeSNSManage(opWebRequest $request)
+  {
+    $inputData = $this->getUser()->getFlash('input_data');
+
+    if ($inputData === null)
+    {
+      $this->redirect('community/'.opHostingSnsManager::COMMUNITY_ID);
+    }
+
+    $this->_snsManager->updateSNSInfoByInputData($inputData);
+
+    $this->getUser()->setFlash('notice', 'SNSの情報を変更しました');
+    $this->redirect('community/'.opHostingSnsManager::COMMUNITY_ID);
   }
 
 }

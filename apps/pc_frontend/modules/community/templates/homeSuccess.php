@@ -36,7 +36,7 @@ op_include_parts('nineTable', 'frendList', $options);
 
   if (opHostingUtil::isSNSManagerCommunity())
   {
-    include_partial('sNSManagerCommunity');
+    include_partial('sNSManagerCommunity', array('form' => $form));
   }
   else
   {
