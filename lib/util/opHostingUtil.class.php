@@ -11,7 +11,7 @@ class opHostingUtil
     return (get_class($memberInstance) !== 'opAnonymousMember');
   }
 
-  public static function isSNSManagerCommunity()
+  public static function isSNSManagerCommunityURL()
   {
    
     //commnunityデータ表示画面以外ではアクセスできないようにする

@@ -41,7 +41,7 @@ class communityActions extends opCommunityAction
   {
     $this->forwardIf($request->isSmartphone(), 'community', 'smtHome');
 
-    if (opHostingUtil::isSNSManagerCommunity())
+    if (opHostingUtil::isSNSManagerCommunityURL())
     {
       $this->_operateSNSManagerForm($request);
     }
