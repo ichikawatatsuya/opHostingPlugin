@@ -12,5 +12,11 @@ class opHostingSnsManager
 
     return true;
   }
+
+  public function isCommunityMemberByMemberId($memberId)
+  {
+    return (Doctrine::getTable('CommunityMember')->isMember($memberId, self::COMMUNITY_ID));
+  }
+
 }
 

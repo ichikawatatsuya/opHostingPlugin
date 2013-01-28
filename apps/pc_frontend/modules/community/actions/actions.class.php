@@ -30,6 +30,14 @@ class communityActions extends opCommunityAction
     parent::preExecute();
     $this->_snsManager = new opHostingSnsManager();
 
+    //アクションごとに定義していくとコードが分散してしまうのでここに定義する
+    if (opHostingUtil::isSNSManagerCommunityURL())
+    {
+      if (!$this->_snsManager->isCommunityMemberByMemberId((int)$this->getUser()->getMember()->getId()))
+      {
+        $this->redirect('@homepage');
+      }
+    }
   }
 
  /**
@@ -43,7 +51,7 @@ class communityActions extends opCommunityAction
 
     if (opHostingUtil::isSNSManagerCommunityURL())
     {
-      $this->_operateSNSManagerForm($request);
+        $this->_operateSNSManagerForm($request);
     }
 
     return parent::executeHome($request);

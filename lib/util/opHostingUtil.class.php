@@ -20,6 +20,11 @@ class opHostingUtil
       return false;
     }
 
+    if (sfContext::getInstance()->getActionName() === 'sNSManage')
+    {
+      return true;
+    }
+
     if (sfContext::getInstance()->getActionName() !== 'home')
     {
       return false;
