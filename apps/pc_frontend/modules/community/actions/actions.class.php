@@ -100,7 +100,14 @@ class communityActions extends opCommunityAction
       $this->checkThemeDirValidity();
     }
 
-    $this->form = new opHostingSNSManagerForm(array(), array('themes' => $this->themes));
+    $snsInfo = $this->_snsManager->findSNSInfo();
+
+    $formParam = array(
+      'themes' => $this->themes,
+      'name'   => $snsInfo['name'],
+    );
+    
+    $this->form = new opHostingSNSManagerForm(array(), $formParam);
 
     if ($request->isMethod(sfRequest::POST))
     {

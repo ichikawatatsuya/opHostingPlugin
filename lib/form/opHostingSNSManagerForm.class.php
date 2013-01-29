@@ -13,6 +13,8 @@ class opHostingSNSManagerForm extends sfForm
         'name' => 'SNS名',
     ));
 
+    $this->widgetSchema['name']->setDefault($this->getOption('name'));
+
     $this->setValidator('name', new sfValidatorString(array('required' => true), array('required' => 'SNS名を入力してください')));
 
     $themeForm = new opThemeActivationForm(array(), array('themes' => $this->getOption('themes')));
