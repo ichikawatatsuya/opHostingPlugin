@@ -51,5 +51,40 @@ class opHostingSnsManager
         );
   }
 
+  public function registerHostingPaidService()
+  {
+    $hostingConfig = $this->_findHostingPaidServiceConfig();
+    $hostingConfig->setValue(true);
+    $hostingConfig->save();
+  }
+
+  public function cancelHostingPaidService()
+  {
+    $hostingConfig = $this->_findHostingPaidServiceConfig();
+    $hostingConfig->setValue(false);
+    $hostingConfig->save();
+  }
+
+  public function isRegisterdHostingPaidService()
+  {
+    $hostingConfig = $this->_findHostingPaidServiceConfig();
+
+    return ($hostingConfig->getValue());
+  }
+
+
+  private function _findHostingPaidServiceConfig()
+  {
+    $hostingConfig = Doctrine::getTable('SnsConfig')->retrieveByName('used_hosting_paid_service');
+
+    if ($hostingConfig === null)
+    {
+      $hostingConfig = new SnsConfig();
+      $hostingConfig->setName('used_hosting_paid_service');
+    }
+
+    return $hostingConfig;
+  }
+
 }
 
