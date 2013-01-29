@@ -64,6 +64,23 @@ class opHostingUtil
     require_once ($basePath.'theme/opThemeInfoParser.class.php');
   }
 
+  public static function getRequiredPlugin()
+  {
+    $requiredPlugins = array(
+      'opHostingPlugin'
+    );
+
+    $snsManager = new opHostingSnsManager();
+    if (!$snsManager->isRegisterdHostingPaidService())
+    {
+      $requiredPlugins[] = 'opHostingBetaPlugin';
+    }
+    
+    return $requiredPlugins;
+  }
+
+
+
   private static function _getSkinThemePluginLibBasePath()
   {
     $pluginClassPath = sfConfig::get('sf_root_dir');

@@ -82,7 +82,7 @@ class opHostingHelper
 
   private static function _is_required_plugin_tag($pluginTag)
   {
-    foreach (opHostingSnsManager::getRequiredPlugin() as $pluginName)
+    foreach (opHostingUtil::getRequiredPlugin() as $pluginName)
     {
       $pattern = '/'.$pluginName.'/';
 

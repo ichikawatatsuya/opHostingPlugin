@@ -43,13 +43,6 @@ class opHostingSnsManager
     return $info;
   }
 
-  public static function getRequiredPlugin()
-  {
-    return array(
-        'opHostingBetaPlugin',
-        'opHostingPlugin',
-        );
-  }
 
   public function registerHostingPaidService()
   {
@@ -69,7 +62,7 @@ class opHostingSnsManager
   {
     $hostingConfig = $this->_findHostingPaidServiceConfig();
 
-    return ($hostingConfig->getValue());
+    return (boolean)$hostingConfig->getValue();
   }
 
 

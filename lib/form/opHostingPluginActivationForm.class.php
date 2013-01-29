@@ -1,28 +1,18 @@
 <?php
 
-/**
- * Plugin Activation Form
- *
- * @package    OpenPNE
- * @subpackage form
- * @author     Kousuke Ebihara <ebihara@tejimaya.com>
- * @author     Shogo Kawahara <kawahara@bucyou.net>
- */
 class opHostingPluginActivationForm extends PluginActivationForm
 {
 
   public function bind(array $taintedValues = null, array $taintedFiles = null)
   {
-    //必須プラグインを変更しようとしたら例外を発生させる
-
-    $choisedPluginNames = $taintedValues['plugin'];
-
-    foreach (opHostingSnsManager::getRequiredPlugin() as $pluginName)
+    //必須プラグインはフォームの動作に関係なく外せないようにする フォームではdisableなので値は渡っていない
+    if (isset($taintedValues['plugin']))
     {
-      if (in_array($pluginName, $choisedPluginNames))
-      {
-        throw new RuntimeException('不正な操作がされました');
-      }
+      $taintedValues['plugin'] = array_merge($taintedValues['plugin'], opHostingUtil::getRequiredPlugin());
+    }
+    else
+    {
+      $taintedValues['plugin'] = opHostingUtil::getRequiredPlugin();
     }
 
     return parent::bind($taintedValues, $taintedFiles);
