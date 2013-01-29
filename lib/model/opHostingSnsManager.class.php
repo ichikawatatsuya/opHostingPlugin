@@ -43,5 +43,13 @@ class opHostingSnsManager
     return $info;
   }
 
+  public static function getRequiredPlugin()
+  {
+    return array(
+        'opHostingBetaPlugin',
+        'opHostingPlugin',
+        );
+  }
+
 }
 
