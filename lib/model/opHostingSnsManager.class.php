@@ -10,6 +10,9 @@ class opHostingSnsManager
     $nameConfig->setValue($inputData['name']);
     $nameConfig->save();
 
+    $themeConfig = new opThemeConfig();
+    $themeConfig->save($inputData['theme']);
+
     return true;
   }
 

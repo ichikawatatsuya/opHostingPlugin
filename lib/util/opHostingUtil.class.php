@@ -3,7 +3,6 @@
 class opHostingUtil
 {
   
-
   public static function isLoggedInPage()
   {
     //ログインしていない場合は強制的にログインページを表示している
@@ -33,4 +32,31 @@ class opHostingUtil
     return ((int)sfContext::getInstance()->getRequest()->getParameter('id') === opHostingSnsManager::COMMUNITY_ID);
   }
 
+  public static function canUseThemePlugin()
+  {
+    //クラスだとスコープが違っているためチェックできないので、ファイルが存在するかで確認する
+    $pluginClassPath = self::_getSkinThemePluginLibBasePath().'/theme/opTheme.class.php';
+
+    return (file_exists($pluginClassPath));
+  }
+
+  public static function requireThemePluginAllLib()
+  {
+    $basePath = self::_getSkinThemePluginLibBasePath().'/';
+
+    require_once ($basePath.'event/opThemeEvent.class.php');
+    require_once ($basePath.'theme/opTheme.class.php');
+    require_once ($basePath.'theme/opThemeAssetSearchFactory.class.php');
+    require_once ($basePath.'theme/opThemeAssetSearch.class.php');
+    require_once ($basePath.'theme/opThemeConfig.class.php');
+    require_once ($basePath.'theme/opThemeInfoParser.class.php');
+  }
+
+  private static function _getSkinThemePluginLibBasePath()
+  {
+    $pluginClassPath = sfConfig::get('sf_root_dir');
+    $pluginClassPath .= '/plugins/opSkinThemePlugin/lib';
+    return $pluginClassPath;
+
+  }
 }

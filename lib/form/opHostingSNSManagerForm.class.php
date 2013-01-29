@@ -4,17 +4,35 @@ class opHostingSNSManagerForm extends sfForm
 {
   public function configure()
   {
+
+    $this->_checkParams();
+
     $this->widgetSchema['name'] = new sfWidgetFormInputText();
- 
+
     $this->widgetSchema->setLabels(array(
-       'name' => 'SNS名',
+        'name' => 'SNS名',
     ));
 
+    $this->setValidator('name', new sfValidatorString(array('required' => true), array('required' => 'SNS名を入力してください')));
+
+    $themeForm = new opThemeActivationForm(array(), array('themes' => $this->getOption('themes')));
+    $themeFiledKey = opThemeActivationForm::THEME_FILED_KEY;
+    $themeWidget = $themeForm->getWidget($themeFiledKey);
+    $this->widgetSchema[$themeFiledKey] = $themeWidget;
+
+    $this->widgetSchema[$themeFiledKey]->setDefault($themeForm->findDefaultThemeName());
+
+    $this->setValidator($themeFiledKey, $themeForm->getValidator($themeFiledKey));
+    
     $this->widgetSchema->setNameFormat('manager[%s]');
+  }
 
-    $this->setValidators(array(
-        'name' => new sfValidatorString(array('required' => true), array('required' => 'SNS名を入力してください')),
-    ));
+  private function _checkParams()
+  {
+    if (null === $this->getOption('themes'))
+    {
+      throw new RuntimeException('themesのパラメーターが渡されていません');
+    }
   }
 
 }

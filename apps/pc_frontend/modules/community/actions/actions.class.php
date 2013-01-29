@@ -17,6 +17,7 @@
  */
 class communityActions extends opCommunityAction
 {
+
   const VIEW_SNS_MANAGER = 'SnsManager';
 
   /**
@@ -28,40 +29,53 @@ class communityActions extends opCommunityAction
   public function preExecute()
   {
     parent::preExecute();
+
+    if (opHostingUtil::canUseThemePlugin())
+    {
+      opHostingUtil::requireThemePluginAllLib();
+    }
+
     $this->_snsManager = new opHostingSnsManager();
+
+    $this->search = opThemeAssetSearchFactory::createSearchInstance();
+    $this->config = new opThemeConfig();
 
     //アクションごとに定義していくとコードが分散してしまうのでここに定義する
     if (opHostingUtil::isSNSManagerCommunityURL())
     {
-      if (!$this->_snsManager->isCommunityMemberByMemberId((int)$this->getUser()->getMember()->getId()))
+      if (!$this->_snsManager->isCommunityMemberByMemberId((int) $this->getUser()->getMember()->getId()))
       {
         $this->redirect('@homepage');
       }
     }
+
+
+    
+
   }
 
- /**
-  * Executes home action
-  *
-  * @param opWebRequest $request A request object
-  */
+  /**
+   * Executes home action
+   *
+   * @param opWebRequest $request A request object
+   */
   public function executeHome(opWebRequest $request)
   {
     $this->forwardIf($request->isSmartphone(), 'community', 'smtHome');
 
     if (opHostingUtil::isSNSManagerCommunityURL())
     {
-        $this->_operateSNSManagerForm($request);
+      $this->_operateSNSManagerForm($request);
     }
 
     return parent::executeHome($request);
   }
 
- /**
-  * Executes smtHome action
-  *
-  * @param opWebRequest $request A request object
-  */
+  /**
+   * Executes smtHome action
+   *
+   * @param opWebRequest $request A request object
+   */
   public function executeSmtHome(opWebRequest $request)
   {
     $gadgets = Doctrine::getTable('Gadget')->retrieveGadgetsByTypesName('smartphoneCommunity');
@@ -77,8 +91,16 @@ class communityActions extends opCommunityAction
 
   private function _operateSNSManagerForm(opWebRequest $request)
   {
+    $this->themes = $this->search->loadThemeInsance();
+    $this->useTheme = $this->config->findUseTheme();
+    $this->unRegisterUseTheme = $this->config->unRegisteredisTheme();
 
-    $this->form = new opHostingSNSManagerForm();
+    if (opHostingUtil::canUseThemePlugin())
+    {
+      $this->checkThemeDirValidity();
+    }
+
+    $this->form = new opHostingSNSManagerForm(array(), array('themes' => $this->themes));
 
     if ($request->isMethod(sfRequest::POST))
     {
@@ -93,7 +115,6 @@ class communityActions extends opCommunityAction
         
       }
     }
-
   }
 
   public function executeSNSManage(opWebRequest $request)
@@ -109,6 +130,44 @@ class communityActions extends opCommunityAction
 
     $this->getUser()->setFlash('notice', 'SNSの情報を変更しました');
     $this->redirect('community/'.opHostingSnsManager::COMMUNITY_ID);
+  }
+
+    /**
+   * テーマが正しく設置されているかを確認する
+   */
+  private function checkThemeDirValidity()
+  {
+    //まだテーマを選択していない場合はエラーチェックをしない
+    if ($this->config->unRegisteredisTheme()) {
+      //そもそも使用するテーマがないので存在するものとして扱う
+      $this->existsUseTheme = true;
+    }
+    else
+    {
+      $this->existsUseTheme = $this->search->existsAssetsByThemeName($this->useTheme);
+    }
+
+    if ($this->existsNotInfoTheme())
+    {
+      $this->notInfoThemeList = $this->findNotInfoThemeNames();
+    }
+
+    $this->isExistsErrorTheme = (
+            isset($this->notInfoThemeList)
+            || $this->existsUseTheme === false);
+  }
+
+  private function existsNotInfoTheme()
+  {
+    foreach ($this->themes as $theme)
+    {
+      if (!$theme->existsInfoFile())
+      {
+        return true;
+      }
+    }
+
+    return false;
   }
 
 }
