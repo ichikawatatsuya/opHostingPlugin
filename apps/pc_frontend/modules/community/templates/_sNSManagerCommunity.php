@@ -2,7 +2,9 @@
   <table>
     <?php echo $form['name']->renderRow() ?>
 
-    <?php include_partial('themeSelectRows', array('form' => $form)); ?>
+    <?php if(opHostingUtil::canUseThemePlugin()): ?>
+      <?php include_partial('themeSelectRows', array('form' => $form)); ?>
+    <?php endif; ?>
 
     <tr>
       <td colspan="2">

@@ -20,8 +20,11 @@ class opHostingSnsManager
     $this->_nameConfig->setValue($inputData['name']);
     $this->_nameConfig->save();
 
-    $themeConfig = new opThemeConfig();
-    $themeConfig->save($inputData['theme']);
+    if (opHostingUtil::canUseThemePlugin())
+    {
+      $themeConfig = new opThemeConfig();
+      $themeConfig->save($inputData['theme']);
+    }
 
     return true;
   }

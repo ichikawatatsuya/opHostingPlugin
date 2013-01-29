@@ -33,12 +33,12 @@ class communityActions extends opCommunityAction
     if (opHostingUtil::canUseThemePlugin())
     {
       opHostingUtil::requireThemePluginAllLib();
+
+      $this->search = opThemeAssetSearchFactory::createSearchInstance();
+      $this->config = new opThemeConfig();
     }
 
     $this->_snsManager = new opHostingSnsManager();
-
-    $this->search = opThemeAssetSearchFactory::createSearchInstance();
-    $this->config = new opThemeConfig();
 
     //アクションごとに定義していくとコードが分散してしまうのでここに定義する
     if (opHostingUtil::isSNSManagerCommunityURL())
@@ -91,22 +91,26 @@ class communityActions extends opCommunityAction
 
   private function _operateSNSManagerForm(opWebRequest $request)
   {
-    $this->themes = $this->search->loadThemeInsance();
-    $this->useTheme = $this->config->findUseTheme();
-    $this->unRegisterUseTheme = $this->config->unRegisteredisTheme();
-
     if (opHostingUtil::canUseThemePlugin())
     {
+      $this->themes = $this->search->loadThemeInsance();
+      $this->useTheme = $this->config->findUseTheme();
+      $this->unRegisterUseTheme = $this->config->unRegisteredisTheme();
+
       $this->checkThemeDirValidity();
     }
 
     $snsInfo = $this->_snsManager->findSNSInfo();
 
     $formParam = array(
-      'themes' => $this->themes,
       'name'   => $snsInfo['name'],
     );
-    
+
+    if (opHostingUtil::canUseThemePlugin())
+    {
+      $formParam['themes'] = $this->themes;
+    }
+
     $this->form = new opHostingSNSManagerForm(array(), $formParam);
 
     if ($request->isMethod(sfRequest::POST))

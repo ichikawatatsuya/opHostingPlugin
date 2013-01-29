@@ -37,7 +37,19 @@ class opHostingUtil
     //クラスだとスコープが違っているためチェックできないので、ファイルが存在するかで確認する
     $pluginClassPath = self::_getSkinThemePluginLibBasePath().'/theme/opTheme.class.php';
 
-    return (file_exists($pluginClassPath));
+    if (!file_exists($pluginClassPath))
+    {
+      return false;
+    }
+
+
+    $plugin = opPlugin::getInstance('opSkinThemePlugin');    
+    if (!$plugin->getIsActive())
+    {
+      return false;
+    }
+
+    return true;
   }
 
   public static function requireThemePluginAllLib()
