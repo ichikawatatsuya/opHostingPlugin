@@ -6,6 +6,7 @@
  */
 class opHostingHelper
 {
+
   public static function create_community_info_data($params)
   {
     extract($params);
@@ -48,4 +49,50 @@ class opHostingHelper
 
     return $options;
   }
+
+  public static function add_disabled_option_for_required_plugin($tag)
+  {
+    $rows = explode('<tr>', $tag);
+
+    $addedTag = '';
+
+    foreach ($rows as $row)
+    {
+      if (empty($row))
+      {
+        continue;
+      }
+
+      $addedTag .= '<tr>';
+
+      if (self::_is_required_plugin_tag($row))
+      {
+        $addedTag .= preg_replace("/(<input.*) \/>/", '$1 disabled="disabled" />', $row);
+      }
+      else
+      {
+        $addedTag .= $row;
+      }
+
+      $addedTag .= '</tr>';
+    }
+
+    return $addedTag;
+  }
+
+  private static function _is_required_plugin_tag($pluginTag)
+  {
+    foreach (opHostingUtil::getRequiredPlugin() as $pluginName)
+    {
+      $pattern = '/'.$pluginName.'/';
+
+      if (preg_match($pattern, $pluginTag))
+      {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
 }
