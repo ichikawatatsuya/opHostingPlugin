@@ -138,6 +138,13 @@ document.getElementById("SmtSwitchLink").addEventListener("click", function() {
 <?php include_metas() ?>
 <?php include_title() ?>
 <?php use_stylesheet('/cache/css/customizing.css') ?>
+<?php use_stylesheet('/opHostingPlugin/css/bootstrap.min.css') ?>
+<?php use_stylesheet('/opHostingPlugin/css/bootstrap-responsive.min.css') ?>
+<?php use_stylesheet('/opHostingPlugin/css/typica-login.css') ?>
+<?php use_javascript('/opHostingPlugin/js/jquery.js', 'last') ?>
+<?php use_javascript('/opHostingPlugin/js/bootstrap.js', 'last') ?>
+<?php use_javascript('/opHostingPlugin/js/backstretch.min.js', 'last') ?>
+<?php use_javascript('/opHostingPlugin/js/typica-login.js', 'last') ?>
 <?php include_stylesheets() ?>
 <?php if (Doctrine::getTable('SnsConfig')->get('customizing_css')): ?>
 <link rel="stylesheet" type="text/css" href="<?php echo url_for('@customizing_css') ?>" />
@@ -169,14 +176,51 @@ var openpne = '.json_encode($jsonData).';
 <?php echo $op_config->get('pc_html_top') ?>
 <div id="Container">
 
-<div id="Header">
-<div id="HeaderContainer">
-<?php include_partial('global/header') ?>
-</div><!-- HeaderContainer -->
-</div><!-- Header -->
+  <div id="login-wraper">
+    <form class="form login-form" action="/member/login/authMode/MailAddress" method="POST">
+    <legend>Sign in to <span class="blue"><?php echo $op_config['sns_name'] ?></span></legend>
 
-<div id="Contents">
-<div id="ContentsContainer"> 
+        <div class="body">
+          <label for="authMailAddress_mail_address">email</label>
+          <input type="text" name="authMailAddress[mail_address]" id="authMailAddress_mail_address">
+
+          <label for="authMailAddress_password">Password</label>
+          <input type="password" name="authMailAddress[password]" id="authMailAddress_password">
+        </div>
+
+        <div class="footer">
+          <label class="checkbox inline" for="authMailAddress_is_remember_me">
+            <input type="checkbox" name="authMailAddress[is_remember_me]" id="authMailAddress_is_remember_me"> Remember me
+            <input value="member/home" type="hidden" name="authMailAddress[next_uri]" id="authMailAddress_next_uri" />
+          </label>
+
+          <button type="submit" class="btn btn-success">Login</button>
+          <p class="password_query"><a href="/opAuthMailAddress/helpLoginError">ログインできない方はこちら</a></p>
+        </div>
+    </form>
+  </div>
+
+<?php 
+$sns = Doctrine_Core::getTable('snsConfig');
+$con = $sns->getConnection();
+$inviteMode = $con->fetchRow('select * from sns_config where name ="op_auth_MailAddress_plugin_invite_mode"');
+?>
+  <?php if (2 == (int)$inviteMode['value']): ?>
+  <footer class="white navbar-fixed-bottom">
+    Don't have an account yet? <a href="/opHostingPlugin/register.html" class="btn btn-black">Register</a>
+  </footer>
+<?php endif; ?>
+
+
+
+<!--<div id="Header">-->
+<!--<div id="HeaderContainer">-->
+<?php //include_partial('global/header') ?>
+<!--</div>--><!-- HeaderContainer -->
+<!--</div>--><!-- Header -->
+
+<!--<div id="Contents">
+<div id="ContentsContainer"> -->
 
 <div id="localNav">
 <?php
@@ -206,7 +250,7 @@ include_component('default', 'localNav', $localNavOptions);
 
 <?php if (has_slot('op_top')): ?>
 <div id="Top">
-<?php include_slot('op_top') ?>
+<?php// include_slot('op_top') ?>
 </div><!-- Top -->
 <?php endif; ?>
 
@@ -228,12 +272,12 @@ include_component('default', 'localNav', $localNavOptions);
 
 </div><!-- Layout -->
 
-<div id="sideBanner">
-<?php include_component('default', 'sideBannerGadgets'); ?>
-</div><!-- sideBanner -->
+<!--<div id="sideBanner">-->
+<?php //include_component('default', 'sideBannerGadgets'); ?>
+<!--</div>--><!-- sideBanner -->
 
-</div><!-- ContentsContainer -->
-</div><!-- Contents -->
+<!--</div>--><!-- ContentsContainer -->
+<!--</div>--><!-- Contents -->
 
 <?php if ($sf_request->isSmartphone(false)): ?>
 <div id="SmtSwitch">
@@ -247,11 +291,11 @@ document.getElementById("SmtSwitchLink").addEventListener("click", function() {
 </div>
 <?php endif ?>
 
-<div id="Footer">
-<div id="FooterContainer">
-<?php include_partial('global/footer') ?>
-</div><!-- FooterContainer -->
-</div><!-- Footer -->
+<!--<div id="Footer">-->
+<!--<div id="FooterContainer">-->
+<?php// include_partial('global/footer') ?>
+<!--</div>--><!-- FooterContainer -->
+<!--</div>--><!-- Footer -->
 
 <?php echo $op_config->get('pc_html_bottom2') ?>
 </div><!-- Container -->
