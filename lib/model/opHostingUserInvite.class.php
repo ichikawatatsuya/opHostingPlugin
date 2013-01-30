@@ -39,7 +39,7 @@ class opHostingUserInvite
     return!(is_null($this->_findTokenConfig()));
   }
 
-  public function saveInviteToken()
+  public function makeInviteToken()
   {
     $this->_memberConfig->setValue($this->_memberId, self::INVITE_TOKEN_KEY, $this->_createToken());
   }
