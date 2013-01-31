@@ -382,3 +382,7 @@ footer.navbar-fixed-bottom {
     margin: 0 auto;
   }
 }
+
+#authMailAddress_is_remember_me {
+  display: inline!important;
+}
