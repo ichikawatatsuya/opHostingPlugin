@@ -185,7 +185,7 @@ var openpne = '.json_encode($jsonData).';
         <div class="body">
           <label for="authMailAddress_mail_address">email</label>
           <input type="text" name="authMailAddress[mail_address]" id="authMailAddress_mail_address">
-
+          <br />
           <label for="authMailAddress_password">Password</label>
           <input type="password" name="authMailAddress[password]" id="authMailAddress_password">
         </div>
