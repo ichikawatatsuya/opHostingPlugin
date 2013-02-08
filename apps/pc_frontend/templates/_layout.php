@@ -198,20 +198,18 @@ var openpne = '.json_encode($jsonData).';
 
           <button type="submit" class="btn btn-success">Login</button>
           <p class="password_query"><a href="/opAuthMailAddress/helpLoginError">ログインできない方はこちら</a></p>
-        </div>
-    </form>
-  </div>
-
 <?php 
 $sns = Doctrine_Core::getTable('snsConfig');
 $con = $sns->getConnection();
 $inviteMode = $con->fetchRow('select * from sns_config where name ="op_auth_MailAddress_plugin_invite_mode"');
 ?>
-  <?php if (2 == (int)$inviteMode['value']): ?>
-  <footer class="white navbar-fixed-bottom">
-    Don't have an account yet? <a href="/opHostingPlugin/register.html" class="btn btn-black">Register</a>
-  </footer>
+<?php if (2 == (int)$inviteMode['value']): ?>
+  <a href="/opAuthMailAddress/requestRegisterURL">新規登録</a>
 <?php endif; ?>
+        </div>
+    </form>
+  </div>
+
 
 
 
