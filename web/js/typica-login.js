@@ -1,5 +1,4 @@
-jQuery(document).ready(function($) {
-
+jQuery(document).ready(function($) { 
 	$.backstretch([
       "/opHostingPlugin/bg1.png"
   	], {duration: 3000, fade: 750});
@@ -34,6 +33,27 @@ jQuery(document).ready(function($) {
     $('#login-wraper').css('margin-left', '-430px');
     $('table').css('border-width', '1px 1px 1px 0');
   }
+
+  if (0 <= url.indexOf("register/token"))
+  {
+    $('#login-wraper').children().remove();
+    $('#login-wraper').append($('#Center'));
+  }
+
+  if (0 <= url.indexOf("opAuthMailAddress/helpLoginError") || 0 <= url.indexOf("opAuthMailAddress/passwordRecovery"))
+  {
+    $('#login-wraper').children().remove();
+  }
+
+  if ($('.parts').text())
+  {
+    $('#login-wraper').prepend($('.parts'));
+    $('.parts td').css('color', 'red');
+  }
+
+  if(0 <= $('#Center').text().indexOf("このページにはアクセスできません。"))
+  {
+    $('#login-wraper').children().remove();
+    $('#login-wraper').append($('#Center'));
+  }
 });
-
-
